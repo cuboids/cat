@@ -12,7 +12,7 @@ def negate(b: bool) -> Tuple[bool, str]:
 
 class Kleisli:
 
-    def __init__(self, f: Callable) -> None:
+    def __init__(self, f: Callable):
         """ f is a function """
         self.f = f
 
@@ -28,7 +28,7 @@ class Kleisli:
             return result[1]
         return copy2_f
 
-    def __add__(self, other):
+    def __add__(self, other) -> Callable:
         def fg(*args, **kwargs):
             b = self.copy1()(other.copy1()(*args, **kwargs))
             st_g = other.copy2()(*args, **kwargs)
