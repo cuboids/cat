@@ -15,9 +15,9 @@ def kleisli_id(x: Any) -> Tuple[Any, Any]:
 
 
 class Kleisli:
+    """Category Theory for Programmers, Chap. 4. """
 
     def __init__(self, f: Callable) -> None:
-        """ f is a function """
         self.f = f
 
     def copy1(self) -> Callable:
