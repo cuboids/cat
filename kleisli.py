@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Tuple, Any
 from collections.abc import Callable
 
 
@@ -10,9 +10,13 @@ def negate(b: bool) -> Tuple[bool, str]:
     return not b, "Not so! "
 
 
+def kleisli_id(x: Any) -> Tuple[Any, Any]:
+    return x, ""
+
+
 class Kleisli:
 
-    def __init__(self, f: Callable):
+    def __init__(self, f: Callable) -> None:
         """ f is a function """
         self.f = f
 
@@ -28,18 +32,22 @@ class Kleisli:
             return result[1]
         return copy2_f
 
-    def __add__(self, other) -> Callable:
+    def __call__(self, *args, **kwargs):
+        return self.f(*args, **kwargs)
+
+    def __add__(self, other):
         def fg(*args, **kwargs):
             b = self.copy1()(other.copy1()(*args, **kwargs))
             st_g = other.copy2()(*args, **kwargs)
             st_f = self.copy2()(other.copy1()(*args, **kwargs))
             return b, st_g + st_f
-        return fg
+        return Kleisli(fg)
 
 
-example = True
+example = 1
 if example:
     negate = Kleisli(negate)
     is_even = Kleisli(is_even)
-    is_odd = negate + is_even
-    print(is_odd(7))
+    kleisli_id = Kleisli(kleisli_id)
+    is_odd = kleisli_id + negate + kleisli_id + is_even
+    print(is_odd(9))
