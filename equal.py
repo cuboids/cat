@@ -1,20 +1,25 @@
-from typing import Tuple, Any
+from typing import Optional, Any
 
 
-# The way we implement the product of int and str here is by
-# making them into tuples, where the second element is a bool
-# indicating if an element is an integer. The reason for this
-# implementation choice is that is is easily generalizable to
-# products of other sets than int and str.
-Product = [(12, True), (239023, True), ('Shakespeare', False)]
+class Either:
 
-def equal(t: Tuple) -> Any:
-    """Similar to Haskell's Equal?!"""
-    # Or whatever you'd like them to be.
-    left, right = lambda a:a, lambda b:b
-    if t[1]:
-        return left(t[0])
-    return right(t[0])
+    # Overwrite this to restrict to specific types.
+    LEFT_TYPE = Any
+    RIGHT_TYPE = Any
+
+    def __init__(self, direction: str, value: Any):
+        self.direction = direction
+        self.value = value
+
+    def left(self) -> Optional[LEFT_TYPE]:
+        if self.direction.casefold() == "left":
+            return self.value
+
+    def right(self) -> Optional[RIGHT_TYPE]:
+        if self.direction.casefold() == "right":
+            return self.value
 
 
-print(equal(Product[2]))
+x = Either("Left", "shakespeare")
+print(x.left())
+print(x.right())
