@@ -8,6 +8,11 @@ class Shape(ABC):
     def __init__(self):
         self.number = random.choice(range(10))
 
+    @classmethod
+    def __subclasshook__(cls, subclass):
+        return (hasattr(subclass, 'area') and callable(subclass.area) and
+                hasattr(subclass, 'area') and callable(subclass.area) or NotImplemented)
+
     @abc.abstractmethod
     def area(self):
         raise NotImplementedError
@@ -48,6 +53,10 @@ class Square(Rect):
         self.height = self.depth = depth
 
 
+class Weirdshape(Shape):
+    pass
+
+
 r = Rect(2, 4)
 c1 = Circle(3/math.sqrt(math.pi))
 c2 = Circle(3/math.pi)
@@ -56,3 +65,8 @@ assert r.area() == 8
 assert math.isclose(c1.area(), 9)
 assert math.isclose(c2.circ(), 6)
 assert s.area() == 9
+try:
+    Weirdshape()
+    assert False
+except TypeError:
+    assert True
