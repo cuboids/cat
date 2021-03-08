@@ -1,12 +1,11 @@
 import abc
-from abc import ABC
 import math
 import random
 
 import pytest
 
 
-class Shape(ABC):
+class Shape(abc.ABC):
     def __init__(self):
         self.color = random.choice(["Yellow", "Red", "Blue", "Violet"])
 
@@ -26,38 +25,38 @@ class Shape(ABC):
 
 class Circle:
     def __init__(self, radius: float = 1.0):
-        super().__init__()
+        super().__init__()  # Does nothing, because Circle does not inherit from Shape 
         self.radius = radius
 
-    def area(self):
+    def area(self) -> float:
         return math.pi * self.radius ** 2
 
-    def circ(self):
+    def circ(self) -> float:
         return 2 * math.pi * self.radius
 
 
 class Rect(Shape):
     def __init__(self, depth: float = 1.0, height: float = 1.0):
-        super().__init__()
+        super().__init__()  # Assigns a color, because Rect inherits from Shape
         self.depth = depth
         self.height = height
 
-    def area(self):
+    def area(self) -> float:
         return self.depth * self.height
 
-    def circ(self):
+    def circ(self) -> float:
         return 2.0 * (self.depth + self.height)
 
 
 class Square(Rect):
     def __init__(self, depth: float = 1.0):
-        super().__init__()
+        super().__init__()  # Calls Rect.__init__(), which calls Shape.__init__()
         self.height = self.depth = depth
 
 
 class Weirdshape(Shape):
-    def area(self):
-        return 42
+    def area(self) -> float:
+        return 123.456
 
 
 class TestShape:
